@@ -1,4 +1,3 @@
-from all_models import *
 from adm_db_panel import *
 import sys
 
