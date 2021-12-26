@@ -1,7 +1,4 @@
+from all_models import *
 
-def print_hi(name):
-    print(f'Hi, {name}')
-
-
-if __name__ == '__main__':
-    print_hi('Py')
+for i in session.query(Character).all():
+    print(i)
