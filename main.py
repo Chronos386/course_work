@@ -1,7 +1,5 @@
 from adm_db_panel import *
 
-for i in session.query(Character).all():
-    print(i)
 
 Ui_MainWindow.app = QtWidgets.QApplication(sys.argv)
 Ui_MainWindow.MainWindow = QtWidgets.QMainWindow()

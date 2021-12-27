@@ -156,7 +156,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Окно управления Базой Данных"))
         self.label.setText(_translate("MainWindow", "Выберите таблицу из списка"))
         self.groupBox.setTitle(_translate("MainWindow", "Изменение таблицы"))
         self.label_3.setText(_translate("MainWindow", "Выберите столбец из таблицы"))
@@ -525,8 +525,9 @@ class Ui_MainWindow(object):
                     if stlb == "arm_id":
                         act = update(table).where(table.id == stri).values(arm_id=int(text))
             if change == "Удалить строку":
-                act = delete(table).where(table.id == stri)
-            conn.execute(act)
+                #act = delete(table).where(table.id == stri)
+                session.query(table).filter_by(id=stri).delete(synchronize_session=False)
+            #conn.execute(act)
             self.show_table()
         except:
             self.statusbar.showMessage("Произошла ошибка")
