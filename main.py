@@ -1,10 +1,7 @@
-from adm_db_panel import *
-from PyQt5 import Qt
+from interface_classes import *
+import sys
 
-Ui_MainWindow.app = QtWidgets.QApplication(sys.argv)
-Ui_MainWindow.MainWindow = QtWidgets.QMainWindow()
-Ui_MainWindow.ui = Ui_MainWindow()
-Ui_MainWindow.ui.setupUi(Ui_MainWindow.MainWindow)
-Ui_MainWindow.MainWindow.show()
-sys.exit(Ui_MainWindow.app.exec_())
-
+app = QApplication(sys.argv)
+window = log_panel()
+window.show()
+sys.exit(app.exec_())
