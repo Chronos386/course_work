@@ -5,7 +5,8 @@ import sys
 
 
 class Ui_MainWindow(object):
-    def __init__(self):
+    def __init__(self, parent=None):
+        super().__init__()
         self.app = QtWidgets.QApplication(sys.argv)
         self.MainWindow = None
         self.ui = None
@@ -197,33 +198,39 @@ class Ui_MainWindow(object):
         self.comboBox_3.clear()
         self.listView.clearSelection()
         result = self.comboBox.currentText()
+        table = Weapon
         line = 0
         collums = []
         if result == "Типы оружия":
+            table = weapon_types
             line = session.query(weapon_types).count()
             self.listView.setColumnCount(2)
             self.qTable = session.query(weapon_types).all()
             collums = ['id', 'name']
             self.listView.setHorizontalHeaderLabels(["ID", "Название"])
         if result == "Типы брони":
+            table = armor_types
             line = session.query(armor_types).count()
             self.listView.setColumnCount(2)
             self.qTable = session.query(armor_types).all()
             collums = ['id', 'name']
             self.listView.setHorizontalHeaderLabels(["ID", "Название"])
         if result == "Статусы пользователя":
+            table = user_status
             line = session.query(user_status).count()
             self.listView.setColumnCount(2)
             self.qTable = session.query(user_status).all()
             collums = ['id', 'status']
             self.listView.setHorizontalHeaderLabels(["ID", "Статус"])
         if result == "Описания":
+            table = descriptions
             line = session.query(descriptions).count()
             self.listView.setColumnCount(2)
             self.qTable = session.query(descriptions).all()
             collums = ['id', 'field']
             self.listView.setHorizontalHeaderLabels(["ID", "Описание"])
         if result == "Расы":
+            table = Races
             line = session.query(Races).count()
             self.listView.setColumnCount(7)
             self.qTable = session.query(Races).all()
@@ -231,6 +238,7 @@ class Ui_MainWindow(object):
             self.listView.setHorizontalHeaderLabels(
                 ["ID", "Название", "Повышение характеристик", "Мировозрение", "Размер", "Скорость", "ID описания"])
         if result == "Разновидности рас":
+            table = var_races
             line = 14  # session.query(var_races).count()
             self.listView.setColumnCount(6)
             self.qTable = session.query(var_races).all()
@@ -238,12 +246,14 @@ class Ui_MainWindow(object):
             self.listView.setHorizontalHeaderLabels(
                 ["ID", "Название", "Повышение характеристик", "Доп. способность", "ID расы", "ID описания"])
         if result == "Аккаунты":
+            table = Accounts
             line = session.query(Accounts).count()
             self.listView.setColumnCount(4)
             self.qTable = session.query(Accounts).all()
             collums = ['id', 'login', 'password', 'stat_id']
             self.listView.setHorizontalHeaderLabels(["ID", "Логин", "Пароль", "ID статуса"])
         if result == "Классы":
+            table = Classes
             line = session.query(Classes).count()
             self.listView.setColumnCount(5)
             self.qTable = session.query(Classes).all()
@@ -251,18 +261,21 @@ class Ui_MainWindow(object):
             self.listView.setHorizontalHeaderLabels(
                 ["ID", "Название", "Бонус мастерства", "Кол-во доступных заклинаний", "ID описания"])
         if result == "Оружие":
+            table = Weapon
             line = session.query(Weapon).count()
             self.listView.setColumnCount(6)
             self.qTable = session.query(Weapon).all()
             collums = ['id', 'name', 'price', 'damage', 'weight', 'weap_t_id']
             self.listView.setHorizontalHeaderLabels(["ID", "Название", "Цена", "Урон", "Вес", "ID типа"])
         if result == "Броня":
+            table = Armor
             line = session.query(Armor).count()
             self.listView.setColumnCount(6)
             self.qTable = session.query(Armor).all()
             collums = ['id', 'name', 'price', 'steal_hindr', 'weight', 'arm_t_id']
             self.listView.setHorizontalHeaderLabels(["ID", "Название", "Цена", "Громкий", "Вес", "ID типа"])
         if result == "Таблица заклинаний":
+            table = Spell_table
             line = session.query(Spell_table).count()
             self.listView.setColumnCount(6)
             self.qTable = session.query(Spell_table).all()
@@ -270,24 +283,28 @@ class Ui_MainWindow(object):
             self.listView.setHorizontalHeaderLabels(
                 ["ID", "Название", "Уровень", "Дистанция", "Длительность", "ID описания"])
         if result == "Связи типов оружия и классов":
+            table = Relat_table_t_weap_t_cl
             line = 21  # session.query(Relat_table_t_weap_t_cl).count()
             self.listView.setColumnCount(3)
             self.qTable = session.query(Relat_table_t_weap_t_cl).all()
             collums = ['id', 'weap_t_id', 'class_id']
             self.listView.setHorizontalHeaderLabels(["ID", "ID типа оружия", "ID класса"])
         if result == "Связи типов доспехов и классов":
+            table = Relat_table_t_arm_t_cl
             line = 25  # session.query(Relat_table_t_arm_t_cl).count()
             self.listView.setColumnCount(3)
             self.qTable = session.query(Relat_table_t_arm_t_cl).all()
             collums = ['id', 'arm_t_id', 'class_id']
             self.listView.setHorizontalHeaderLabels(["ID", "ID типа брони", "ID класса"])
         if result == "Связи заклинаний и классов":
+            table = Relat_table_t_spell_cl
             line = 28  # session.query(Relat_table_t_spell_cl).count()
             self.listView.setColumnCount(3)
             self.qTable = session.query(Relat_table_t_spell_cl).all()
             collums = ['id', 'spell_id', 'class_id']
             self.listView.setHorizontalHeaderLabels(["ID", "ID заклинания", "ID класса"])
         if result == "Персонаж":
+            table = Character
             line = session.query(Character).count()
             self.listView.setColumnCount(13)
             self.qTable = session.query(Character).all()
@@ -298,18 +315,31 @@ class Ui_MainWindow(object):
                  "ID разновидности расы", "ID класса", "ID оружия", "ID брони"])
 
         self.listView.setRowCount(line)
+        sort = [0] * line
+        j = 0
         for i in collums:
             if i != 'id':
                 self.comboBox_2.addItem(i)
-        for i in range(line):
-            self.comboBox_3.addItem(str(i + 1))
-        for row, form in enumerate(self.qTable):
-            col = 0
-            for c in collums:
-                for k, v in vars(form).items():
-                    if c == k:
-                        self.listView.setItem(row, col, QTableWidgetItem(str(v)))
-                        col += 1
+        for i in session.query(table).all():
+            sort[j] = i.id
+            j += 1
+        sort.sort()
+        for i in sort:
+            self.comboBox_3.addItem(str(i))
+        perem = 0
+        j = -1
+        for i in sort:
+            j += 1
+            for row, form in enumerate(self.qTable):
+                col = 0
+                for c in collums:
+                    for k, v in vars(form).items():
+                        if c == k:
+                            if c == 'id':
+                                perem = v
+                            if ((c == 'id') & (v == i)) | ((c != 'id') & (perem == i)):
+                                self.listView.setItem(j, col, QTableWidgetItem(str(v)))
+                                col += 1
         self.listView.setStyleSheet("selection-color: rgb(255, 0, 127);\n"
                                     "selection-background-color: rgb(85, 255, 127);")
         self.listView.resizeColumnsToContents()
@@ -317,7 +347,6 @@ class Ui_MainWindow(object):
     def change_table(self):
         self.statusbar.clearMessage()
         if self.prov == 0:
-            self.transaction = conn.begin()
             self.prov = 1
         result = self.comboBox.currentText()
         change = self.comboBox_4.currentText()
@@ -326,215 +355,239 @@ class Ui_MainWindow(object):
         text = self.textBrowser.toPlainText()
         lis = text.split(',')
         table = Weapon
+        user_setting = insert(table).values(id=session.query(table).count() + 1, name=text)
+        query = session.query(table).filter(table.id == 1)
         act = delete(Weapon).where(Weapon.id == 1)
         try:
             if result == "Типы оружия":
                 table = weapon_types
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=text)
+                    user_setting = table(id=session.query(table).count() + 1, name=text)
                 if change == "Обновить элемент":
-                    act = update(table).where(table.id == stri).values(name=text)
+                    query = session.query(table).filter(table.id == stri).first()
+                    query.name = text
             if result == "Типы брони":
                 table = armor_types
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=text)
+                    user_setting = table(id=session.query(table).count() + 1, name=text)
                 if change == "Обновить элемент":
-                    act = update(table).where(table.id == stri).values(name=text)
+                    query = session.query(table).filter(table.id == stri).first()
+                    query.name = text
             if result == "Статусы пользователя":
                 table = user_status
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=text)
+                    user_setting = table(id=session.query(table).count() + 1, status=text)
                 if change == "Обновить элемент":
-                    act = update(table).where(table.id == stri).values(name=text)
+                    query = session.query(table).filter(table.id == stri).first()
+                    query.status = text
             if result == "Описания":
                 table = descriptions
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=text)
+                    user_setting = table(id=session.query(table).count() + 1, field=text)
                 if change == "Обновить элемент":
-                    act = update(table).where(table.id == stri).values(name=text)
+                    query = session.query(table).filter(table.id == stri).first()
+                    query.field = text
             if result == "Расы":
                 table = Races
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0], incr_char=lis[1],
-                                               worldview=lis[2], size=lis[3], speed=int(lis[4]), descr_id=int(lis[5]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], incr_char=lis[1],
+                                         worldview=lis[2], size=lis[3], speed=int(lis[4]), descr_id=int(lis[5]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "incr_char":
-                        act = update(table).where(table.id == stri).values(incr_char=text)
+                        query.incr_char = text
                     if stlb == "worldview":
-                        act = update(table).where(table.id == stri).values(worldview=text)
+                        query.worldview = text
                     if stlb == "size":
-                        act = update(table).where(table.id == stri).values(size=text)
+                        query.size = text
                     if stlb == "speed":
-                        act = update(table).where(table.id == stri).values(speed=int(text))
+                        query.speed = int(text)
                     if stlb == "descr_id":
-                        act = update(table).where(table.id == stri).values(descr_id=int(text))
+                        query.descr_id = int(text)
             if result == "Разновидности рас":
                 table = var_races
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0], incr_char=lis[1],
-                                               add_feat=lis[2], rac_id=int(lis[3]), descr_id=int(lis[4]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], incr_char=lis[1],
+                                         add_feat=lis[2], rac_id=int(lis[3]), descr_id=int(lis[4]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "incr_char":
-                        act = update(table).where(table.id == stri).values(incr_char=text)
+                        query.incr_char = text
                     if stlb == "add_feat":
-                        act = update(table).where(table.id == stri).values(add_feat=text)
+                        query.add_feat = text
                     if stlb == "rac_id":
-                        act = update(table).where(table.id == stri).values(rac_id=text)
+                        query.rac_id = text
                     if stlb == "descr_id":
-                        act = update(table).where(table.id == stri).values(descr_id=int(text))
+                        query.descr_id = int(text)
             if result == "Аккаунты":
                 table = Accounts
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, login=lis[0], password=lis[1],
-                                               stat_id=int(lis[2]))
+                    user_setting = table(id=session.query(table).count() + 1, login=lis[0], password=lis[1],
+                                         stat_id=int(lis[2]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "login":
-                        act = update(table).where(table.id == stri).values(login=text)
+                        query.login = text
                     if stlb == "password":
-                        act = update(table).where(table.id == stri).values(password=text)
+                        query.password = text
                     if stlb == "stat_id":
-                        act = update(table).where(table.id == stri).values(stat_id=int(text))
+                        query.stat_id = int(text)
             if result == "Классы":
                 table = Classes
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0],
-                                               master_bonus=int(lis[1]),
-                                               numb_av_spells=int(lis[2]), descr_id=int(lis[3]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0],
+                                         master_bonus=int(lis[1]),
+                                         numb_av_spells=int(lis[2]), descr_id=int(lis[3]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "master_bonus":
-                        act = update(table).where(table.id == stri).values(master_bonus=int(text))
+                        query.master_bonus = int(text)
                     if stlb == "numb_av_spells":
-                        act = update(table).where(table.id == stri).values(numb_av_spells=int(text))
+                        query.numb_av_spells = int(text)
                     if stlb == "descr_id":
-                        act = update(table).where(table.id == stri).values(descr_id=int(text))
+                        query.descr_id = int(text)
             if result == "Оружие":
                 table = Weapon
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0], price=int(lis[1]),
-                                               damage=int(lis[2]), weight=int(lis[3]), weap_t_id=int(lis[4]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], price=int(lis[1]),
+                                         damage=int(lis[2]), weight=int(lis[3]), weap_t_id=int(lis[4]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "price":
-                        act = update(table).where(table.id == stri).values(price=int(text))
+                        query.price = int(text)
                     if stlb == "damage":
-                        act = update(table).where(table.id == stri).values(damage=int(text))
+                        query.damage = int(text)
                     if stlb == "weight":
-                        act = update(table).where(table.id == stri).values(weight=int(text))
+                        query.weight = int(text)
                     if stlb == "weap_t_id":
-                        act = update(table).where(table.id == stri).values(weap_t_id=int(text))
+                        query.weap_t_id = int(text)
             if result == "Броня":
                 table = Armor
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0], price=int(lis[1]),
-                                               steal_hindr=bool(lis[2]), weight=int(lis[3]), arm_t_id=int(lis[4]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], price=int(lis[1]),
+                                         steal_hindr=bool(lis[2]), weight=int(lis[3]), arm_t_id=int(lis[4]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "price":
-                        act = update(table).where(table.id == stri).values(price=int(text))
+                        query.price = int(text)
                     if stlb == "steal_hindr":
-                        act = update(table).where(table.id == stri).values(steal_hindr=bool(text))
+                        query.steal_hindr = bool(text)
                     if stlb == "weight":
-                        act = update(table).where(table.id == stri).values(weight=int(text))
+                        query.weight = int(text)
                     if stlb == "arm_t_id":
-                        act = update(table).where(table.id == stri).values(arm_t_id=int(text))
+                        query.arm_t_id = int(text)
             if result == "Таблица заклинаний":
                 table = Spell_table
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0], level=int(lis[1]),
-                                               distance=int(lis[2]), duration=int(lis[3]), descr_id=int(lis[4]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], level=int(lis[1]),
+                                         distance=int(lis[2]), duration=int(lis[3]), descr_id=int(lis[4]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "level":
-                        act = update(table).where(table.id == stri).values(level=int(text))
+                        query.level = int(text)
                     if stlb == "distance":
-                        act = update(table).where(table.id == stri).values(distance=int(text))
+                        query.distance = int(text)
                     if stlb == "duration":
-                        act = update(table).where(table.id == stri).values(duration=int(text))
+                        query.duration = int(text)
                     if stlb == "descr_id":
-                        act = update(table).where(table.id == stri).values(descr_id=int(text))
+                        query.descr_id = int(text)
             if result == "Связи типов оружия и классов":
                 table = Relat_table_t_weap_t_cl
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, weap_t_id=int(lis[0]),
-                                               class_id=int(lis[1]))
+                    user_setting = table(id=session.query(table).count() + 1, weap_t_id=int(lis[0]),
+                                         class_id=int(lis[1]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "weap_t_id":
-                        act = update(table).where(table.id == stri).values(weap_t_id=int(text))
+                        query.weap_t_id = int(text)
                     if stlb == "class_id":
-                        act = update(table).where(table.id == stri).values(class_id=int(text))
+                        query.class_id = int(text)
             if result == "Связи типов доспехов и классов":
                 table = Relat_table_t_arm_t_cl
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, arm_t_id=int(lis[0]),
-                                               class_id=int(lis[1]))
+                    user_setting = table(id=session.query(table).count() + 1, arm_t_id=int(lis[0]),
+                                         class_id=int(lis[1]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "arm_t_id":
-                        act = update(table).where(table.id == stri).values(arm_t_id=int(text))
+                        query.arm_t_id = int(text)
                     if stlb == "class_id":
-                        act = update(table).where(table.id == stri).values(class_id=int(text))
+                        query.class_id = int(text)
             if result == "Связи заклинаний и классов":
                 table = Relat_table_t_spell_cl
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, spell_id=int(lis[0]),
-                                               class_id=int(lis[1]))
+                    user_setting = table(id=session.query(table).count() + 1, spell_id=int(lis[0]),
+                                         class_id=int(lis[1]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "spell_id":
-                        act = update(table).where(table.id == stri).values(spell_id=int(text))
+                        query.spell_id = int(text)
                     if stlb == "class_id":
-                        act = update(table).where(table.id == stri).values(class_id=int(text))
+                        query.class_id = int(text)
             if result == "Персонаж":
                 table = Character
                 if change == "Добавить строку":
-                    act = insert(table).values(id=session.query(table).count() + 1, name=lis[0], power=int(lis[1]),
-                                               agility=int(lis[2]), body_type=int(lis[3]), intellect=int(lis[4]),
-                                               wisdom=int(lis[5]), charisma=int(lis[6]), acc_id=int(lis[7]),
-                                               var_races_id=int(lis[8]), class_id=int(lis[9]), weap_id=int(lis[10]),
-                                               arm_id=int(lis[11]))
+                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], power=int(lis[1]),
+                                         agility=int(lis[2]), body_type=int(lis[3]), intellect=int(lis[4]),
+                                         wisdom=int(lis[5]), charisma=int(lis[6]), acc_id=int(lis[7]),
+                                         var_races_id=int(lis[8]), class_id=int(lis[9]), weap_id=int(lis[10]),
+                                         arm_id=int(lis[11]))
                 if change == "Обновить элемент":
+                    query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
-                        act = update(table).where(table.id == stri).values(name=text)
+                        query.name = text
                     if stlb == "power":
-                        act = update(table).where(table.id == stri).values(power=int(text))
+                        query.power = int(text)
                     if stlb == "agility":
-                        act = update(table).where(table.id == stri).values(agility=int(text))
+                        query.agility = int(text)
                     if stlb == "body_type":
-                        act = update(table).where(table.id == stri).values(body_type=int(text))
+                        query.body_type = int(text)
                     if stlb == "intellect":
-                        act = update(table).where(table.id == stri).values(intellect=int(text))
+                        query.intellect = int(text)
                     if stlb == "wisdom":
-                        act = update(table).where(table.id == stri).values(wisdom=int(text))
+                        query.wisdom = int(text)
                     if stlb == "charisma":
-                        act = update(table).where(table.id == stri).values(charisma=int(text))
+                        query.charisma = int(text)
                     if stlb == "acc_id":
-                        act = update(table).where(table.id == stri).values(acc_id=int(text))
+                        query.acc_id = int(text)
                     if stlb == "var_races_id":
-                        act = update(table).where(table.id == stri).values(var_races_id=int(text))
+                        query.var_races_id = int(text)
                     if stlb == "class_id":
-                        act = update(table).where(table.id == stri).values(class_id=int(text))
+                        query.class_id = int(text)
                     if stlb == "weap_id":
-                        act = update(table).where(table.id == stri).values(weap_id=int(text))
+                        query.weap_id = int(text)
                     if stlb == "arm_id":
-                        act = update(table).where(table.id == stri).values(arm_id=int(text))
+                        query.arm_id = int(text)
             if change == "Удалить строку":
-                #act = delete(table).where(table.id == stri)
+                kol = session.query(table).count()
                 session.query(table).filter_by(id=stri).delete(synchronize_session=False)
-            #conn.execute(act)
+                i = stri + 1
+                while i < kol + 1:
+                    query = session.query(table).filter(table.id == i).first()
+                    query.id = i - 1
+                    i += 1
+            if change == "Добавить строку":
+                session.add(user_setting)
+
             self.show_table()
         except:
             self.statusbar.showMessage("Произошла ошибка")
 
     def confirm_change(self):
         if self.prov != 0:
-            self.transaction.commit()
+            session.commit()
             self.prov = 0
             self.show_table()
         else:
@@ -542,7 +595,7 @@ class Ui_MainWindow(object):
 
     def undo_change(self):
         if self.prov != 0:
-            self.transaction.rollback()
+            session.rollback()
             self.prov = 0
             self.show_table()
         else:

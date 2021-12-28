@@ -1,5 +1,5 @@
 from adm_db_panel import *
-
+from PyQt5 import Qt
 
 Ui_MainWindow.app = QtWidgets.QApplication(sys.argv)
 Ui_MainWindow.MainWindow = QtWidgets.QMainWindow()
