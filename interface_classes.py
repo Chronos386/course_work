@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import QTableWidgetItem
 from all_models import *
 from adm_db_panel import Ui_MainWindow
 from login_panel import login_panell
+from pols_menu import pols_main_menu
+from descr_spell import descript_spell
+import sys
 
 
 class Admin_db_Panel(QMainWindow):
@@ -81,7 +84,7 @@ class Admin_db_Panel(QMainWindow):
             self.ui.listView.setColumnCount(5)
             self.ui.qTable = session.query(Classes).all()
             collums = ['id', 'name', 'master_bonus', 'numb_av_spells', 'descr_id']
-            self.listView.setHorizontalHeaderLabels(
+            self.ui.listView.setHorizontalHeaderLabels(
                 ["ID", "Название", "Бонус мастерства", "Кол-во доступных заклинаний", "ID описания"])
         if result == "Оружие":
             table = Weapon
@@ -133,7 +136,7 @@ class Admin_db_Panel(QMainWindow):
             self.ui.qTable = session.query(Character).all()
             collums = ['id', 'name', 'power', 'agility', 'body_type', 'intellect', 'wisdom', 'charisma', 'acc_id',
                        'var_races_id', 'class_id', 'weap_id', 'arm_id']
-            self.listView.setHorizontalHeaderLabels(
+            self.ui.listView.setHorizontalHeaderLabels(
                 ["ID", "Имя", "Сила", "Ловкость", "Телосложение", "Интеллект", "Мудрость", "Харизма", "ID аккаунта",
                  "ID разновидности расы", "ID класса", "ID оружия", "ID брони"])
 
@@ -444,10 +447,12 @@ class log_panel(QMainWindow):
                 if pasw == i.password:
                     self.hide()
                     if i.stat_id == 1:
+                        MyGlobals.id = i.id
                         dialog = Admin_db_Panel(parent=self)
                         dialog.show()
                     else:
-                        dialog = Admin_db_Panel(parent=self)
+                        MyGlobals.id = i.id
+                        dialog = PolsMenu(parent=self)
                         dialog.show()
                 else:
                     self.ui.statusbar.showMessage("Введён неверный пароль")
@@ -471,5 +476,141 @@ class log_panel(QMainWindow):
         session.add(user_setting)
         session.commit()
         self.hide()
-        dialog = Admin_db_Panel(parent=self)
+        dialog = PolsMenu(parent=self)
         dialog.show()
+
+
+class desc_spell(QMainWindow):
+    def __init__(self, parent=None):
+        super(desc_spell, self).__init__(parent)
+        self.ui = descript_spell()
+        self.ui.setupUi(self)
+
+    def des_show(self, lol):
+        spell = session.query(Spell_table).filter_by(id=lol).first()
+        self.ui.textBrowser.clear()
+        new = session.query(descriptions).filter_by(id=spell.descr_id).first()
+        self.ui.textBrowser.insertPlainText(new.field)
+        if spell.level == 1:
+            self.ui.textBrowser_2.insertPlainText("Первый уровень")
+        else:
+            self.ui.textBrowser_2.insertPlainText("Заговор")
+        self.ui.textBrowser_3.insertPlainText(str(spell.distance) + " футов")
+        self.ui.textBrowser_4.insertPlainText(str(spell.duration) + " мин.")
+
+
+class PolsMenu(QMainWindow):
+    def __init__(self, parent=None):
+        super(PolsMenu, self).__init__(parent)
+        self.ui = pols_main_menu()
+        self.ui.setupUi(self)
+        self.dost_pers()
+        self.ui.comboBox_4.addItem("О классе")
+        self.ui.comboBox_4.addItem("О расе")
+        self.ui.comboBox_4.addItem("О разновидности расы")
+        self.ui.comboBox_4.addItem("О выбранном заклинании")
+        self.ui.pushButton.clicked.connect(lambda: self.show_pers_inform())
+        self.ui.action.triggered.connect(lambda: self.out_acc())
+        self.ui.pushButton_3.clicked.connect(lambda: self.dell_pers())
+        self.ui.pushButton_2.clicked.connect(lambda: self.clear_all())
+        self.ui.pushButton_4.clicked.connect(lambda: self.descr())
+
+    def descr(self):
+        spell = self.ui.comboBox_3.currentText()
+        opre = self.ui.comboBox_4.currentText()
+        if opre == "О выбранном заклинании":
+            if spell == "":
+                self.ui.statusbar.showMessage("У нет ни одного заклинания")
+            else:
+                pop = session.query(Spell_table).filter_by(name=spell).first()
+                dialog = desc_spell(parent=self)
+                dialog.show()
+                dialog.des_show(pop.id)
+
+
+    def dost_pers(self):
+        self.ui.comboBox.clear()
+        for i in session.query(Character).all():
+            if i.acc_id == MyGlobals.id:
+                self.ui.comboBox.addItem(i.name)
+
+    def clear_all(self):
+        self.ui.textBrowser_9.clear()
+        self.ui.textBrowser_8.clear()
+        self.ui.textBrowser_7.clear()
+        self.ui.textBrowser_5.clear()
+        self.ui.textBrowser_4.clear()
+        self.ui.textBrowser_6.clear()
+        self.ui.textBrowser.clear()
+        self.ui.comboBox_3.clear()
+        self.ui.textBrowser_3.clear()
+        self.ui.textBrowser_2.clear()
+        self.ui.textBrowser_10.clear()
+        self.ui.textBrowser_11.clear()
+        self.ui.textBrowser_12.clear()
+        self.ui.textBrowser_14.clear()
+        self.ui.textBrowser_13.clear()
+        self.ui.textBrowser_15.clear()
+        self.ui.textBrowser_17.clear()
+        self.ui.textBrowser_18.clear()
+        self.ui.textBrowser_16.clear()
+        self.ui.textBrowser_19.clear()
+
+    def dell_pers(self):
+        named = self.ui.comboBox.currentText()
+        pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
+        session.query(Character).filter_by(id=pop.id).delete(synchronize_session=False)
+        session.commit()
+        self.clear_all()
+        self.ui.comboBox.clear()
+        self.dost_pers()
+
+    def out_acc(self):
+        self.hide()
+        dialog = log_panel(parent=self)
+        dialog.show()
+
+    def show_pers_inform(self):
+        self.clear_all()
+        name = self.ui.comboBox.currentText()
+        if name == "":
+            self.ui.statusbar.showMessage("У Вас ещё нет ни одного персонажа")
+            return
+        zapom = session.query(Character).first()
+        self.ui.textBrowser.insertPlainText(name)
+        for i in session.query(Character).all():
+            if (i.id == MyGlobals.id) & (i.name == name):
+                zapom = i
+        self.ui.textBrowser_9.insertPlainText(str(zapom.power))
+        self.ui.textBrowser_8.insertPlainText(str(zapom.agility))
+        self.ui.textBrowser_7.insertPlainText(str(zapom.body_type))
+        self.ui.textBrowser_5.insertPlainText(str(zapom.wisdom))
+        self.ui.textBrowser_4.insertPlainText(str(zapom.charisma))
+        self.ui.textBrowser_6.insertPlainText(str(zapom.intellect))
+        for i in session.query(Relat_table_t_spell_cl).all():
+            if i.class_id == zapom.class_id:
+                for j in session.query(Spell_table).all():
+                    if j.id == i.spell_id:
+                        self.ui.comboBox_3.addItem(j.name)
+        save = session.query(var_races).filter_by(id=zapom.var_races_id).first()
+        save_2 = session.query(Races).filter_by(id=save.rac_id).first()
+        self.ui.textBrowser_3.insertPlainText(save_2.name + " " + save.name)
+        save = session.query(Classes).filter_by(id=zapom.class_id).first()
+        self.ui.textBrowser_2.insertPlainText(save.name)
+        save = session.query(Weapon).filter_by(id=zapom.weap_id).first()
+        self.ui.textBrowser_10.insertPlainText(save.name)
+        self.ui.textBrowser_11.insertPlainText(str(save.damage))
+        self.ui.textBrowser_12.insertPlainText(str(save.price))
+        self.ui.textBrowser_14.insertPlainText(str(save.weight))
+        save_2 = session.query(weapon_types).filter_by(id=save.weap_t_id).first()
+        self.ui.textBrowser_13.insertPlainText(save_2.name)
+        save = session.query(Armor).filter_by(id=zapom.arm_id).first()
+        self.ui.textBrowser_15.insertPlainText(save.name)
+        self.ui.textBrowser_17.insertPlainText(str(save.price))
+        if save.steal_hindr:
+            self.ui.textBrowser_18.insertPlainText("Присутствует")
+        else:
+            self.ui.textBrowser_18.insertPlainText("Отсутствует")
+        self.ui.textBrowser_16.insertPlainText(str(save.weight))
+        save_2 = session.query(armor_types).filter_by(id=save.arm_t_id).first()
+        self.ui.textBrowser_19.insertPlainText(save_2.name)

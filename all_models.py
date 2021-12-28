@@ -4,6 +4,12 @@ from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy.ext.declarative import declarative_base
 
+
+class MyGlobals(object):
+    id = 1
+    descr = 0
+
+
 Base = declarative_base()
 
 # Подключение к серверу PostgreSQL на localhost

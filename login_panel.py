@@ -56,8 +56,6 @@ class login_panell:
         self.retranslateUi(login_pan)
         QtCore.QMetaObject.connectSlotsByName(login_pan)
 
-        #self.add_func()
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("login_pan", "Вход"))
@@ -65,20 +63,3 @@ class login_panell:
         self.pushButton_2.setText(_translate("login_pan", "Создать новый аккаунт"))
         self.label.setText(_translate("login_pan", "Поле ввода пароля"))
         self.label_2.setText(_translate("login_pan", "Поле ввода логина"))
-'''
-    def add_func(self):
-        self.pushButton.clicked.connect(lambda: self.inter_to_app())
-        self.pushButton_2.clicked.connect(lambda: self.create_acc())
-
-    def inter_to_app(self):
-        log = self.textEdit.toPlainText()
-        pasw = self.textEdit_2.toPlainText()
-        MyGlobals.x = 2
-        #self.hide()
-        self.app.exit()
-        #self.login_pan.close()
-
-    def create_acc(self):
-        log = self.textEdit.toPlainText()
-        pasw = self.textEdit_2.toPlainText()
-'''
