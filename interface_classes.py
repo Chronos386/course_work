@@ -9,6 +9,8 @@ from create_pers import create_per
 from descr_spell import descript_spell
 from descr import descrip
 import random
+import docx
+import pandas as pd
 
 
 class Admin_db_Panel(QMainWindow):
@@ -763,6 +765,423 @@ class AdminMenu(QMainWindow):
         self.ui.action.triggered.connect(lambda: self.out_acc())
         self.ui.pushButton_3.clicked.connect(lambda: self.dell_pers())
         self.ui.pushButton_6.clicked.connect(lambda: self.descr())
+        self.ui.pushButton_4.clicked.connect(lambda: self.vugr_db())
+
+    def vugr_db(self):
+        if self.ui.comboBox_2.currentText() == "В docx":
+            mydoc = docx.Document()
+            for i in range(15):
+                table_1 = mydoc.add_table(rows=0, cols=0, style='Table Grid')
+                table = Weapon
+                line = 0
+                collums = []
+                if i == 0:
+                    mydoc.add_paragraph("Таблица типов оружия (weapon_types):")
+                    table_1 = mydoc.add_table(rows=session.query(weapon_types).count() + 1, cols=2, style='Table Grid')
+                    table = weapon_types
+                    line = session.query(weapon_types).count()
+                    self.ui.qTable = session.query(weapon_types).all()
+                    collums = ['id', 'name']
+                if i == 1:
+                    mydoc.add_paragraph("Таблица типов брони (armor_types):")
+                    table_1 = mydoc.add_table(rows=session.query(armor_types).count() + 1, cols=2, style='Table Grid')
+                    table = weapon_types
+                    line = session.query(weapon_types).count()
+                    self.ui.qTable = session.query(weapon_types).all()
+                    collums = ['id', 'name']
+                if i == 2:
+                    mydoc.add_paragraph("Таблица статусов пользователя (user_status):")
+                    table_1 = mydoc.add_table(rows=session.query(user_status).count() + 1, cols=2, style='Table Grid')
+                    table = user_status
+                    line = session.query(user_status).count()
+                    self.ui.qTable = session.query(user_status).all()
+                    collums = ['id', 'status']
+                if i == 3:
+                    mydoc.add_paragraph("Таблица описаний (descriptions):")
+                    table_1 = mydoc.add_table(rows=session.query(descriptions).count() + 1, cols=2, style='Table Grid')
+                    table = descriptions
+                    line = session.query(descriptions).count()
+                    self.ui.qTable = session.query(descriptions).all()
+                    collums = ['id', 'field']
+                if i == 4:
+                    mydoc.add_paragraph("Таблица рас (Races):")
+                    table_1 = mydoc.add_table(rows=session.query(Races).count() + 1, cols=7, style='Table Grid')
+                    table = Races
+                    line = session.query(Races).count()
+                    self.ui.qTable = session.query(Races).all()
+                    collums = ['id', 'name', 'incr_char', 'worldview', 'size', 'speed', 'descr_id']
+                if i == 5:
+                    mydoc.add_paragraph("Таблица разновидностей рас (var_races):")
+                    table_1 = mydoc.add_table(rows=14 + 1, cols=6, style='Table Grid')
+                    table = var_races
+                    line = 14  # session.query(var_races).count()
+                    self.ui.qTable = session.query(var_races).all()
+                    collums = ['id', 'name', 'incr_char', 'add_feat', 'rac_id', 'descr_id']
+                if i == 6:
+                    mydoc.add_paragraph("Таблица аккаунтов (Accounts):")
+                    table_1 = mydoc.add_table(rows=session.query(Accounts).count() + 1, cols=4, style='Table Grid')
+                    table = Accounts
+                    line = session.query(Accounts).count()
+                    self.ui.qTable = session.query(Accounts).all()
+                    collums = ['id', 'login', 'password', 'stat_id']
+                if i == 7:
+                    mydoc.add_paragraph("Таблица классов (Classes):")
+                    table_1 = mydoc.add_table(rows=session.query(Classes).count() + 1, cols=5, style='Table Grid')
+                    table = Classes
+                    line = session.query(Classes).count()
+                    self.ui.qTable = session.query(Classes).all()
+                    collums = ['id', 'name', 'master_bonus', 'numb_av_spells', 'descr_id']
+                if i == 8:
+                    mydoc.add_paragraph("Таблица оружия (Classes):")
+                    table_1 = mydoc.add_table(rows=session.query(Weapon).count() + 1, cols=6, style='Table Grid')
+                    table = Weapon
+                    line = session.query(Weapon).count()
+                    self.ui.qTable = session.query(Weapon).all()
+                    collums = ['id', 'name', 'price', 'damage', 'weight', 'weap_t_id']
+                if i == 9:
+                    mydoc.add_paragraph("Таблица брони (Armor):")
+                    table_1 = mydoc.add_table(rows=session.query(Armor).count() + 1, cols=6, style='Table Grid')
+                    table = Armor
+                    line = session.query(Armor).count()
+                    self.ui.qTable = session.query(Armor).all()
+                    collums = ['id', 'name', 'price', 'steal_hindr', 'weight', 'arm_t_id']
+                if i == 10:
+                    mydoc.add_paragraph("Таблица заклинаний (Spell_table):")
+                    table_1 = mydoc.add_table(rows=session.query(Spell_table).count() + 1, cols=6, style='Table Grid')
+                    table = Spell_table
+                    line = session.query(Spell_table).count()
+                    self.ui.qTable = session.query(Spell_table).all()
+                    collums = ['id', 'name', 'level', 'distance', 'duration', 'descr_id']
+                if i == 11:
+                    mydoc.add_paragraph("Таблица связи типов оружия и классов (Relat_table_t_weap_t_cl):")
+                    table_1 = mydoc.add_table(rows=21 + 1, cols=3, style='Table Grid')
+                    table = Relat_table_t_weap_t_cl
+                    line = 21  # session.query(Relat_table_t_weap_t_cl).count()
+                    self.ui.qTable = session.query(Relat_table_t_weap_t_cl).all()
+                    collums = ['id', 'weap_t_id', 'class_id']
+                if i == 12:
+                    mydoc.add_paragraph("Таблица связи типов доспехов и классов (Relat_table_t_arm_t_cl):")
+                    table_1 = mydoc.add_table(rows=25 + 1, cols=3,
+                                              style='Table Grid')
+                    table = Relat_table_t_arm_t_cl
+                    line = 25  # session.query(Relat_table_t_arm_t_cl).count()
+                    self.ui.qTable = session.query(Relat_table_t_arm_t_cl).all()
+                    collums = ['id', 'arm_t_id', 'class_id']
+                if i == 13:
+                    mydoc.add_paragraph("Таблица связи заклинаний и классов (Relat_table_t_spell_cl):")
+                    table_1 = mydoc.add_table(rows=28 + 1, cols=3,
+                                              style='Table Grid')
+                    table = Relat_table_t_spell_cl
+                    line = 28  # session.query(Relat_table_t_spell_cl).count()
+                    self.ui.qTable = session.query(Relat_table_t_spell_cl).all()
+                    collums = ['id', 'spell_id', 'class_id']
+                if i == 14:
+                    mydoc.add_paragraph("Таблица персонажей (Character):")
+                    table_1 = mydoc.add_table(rows=session.query(Character).count() + 1, cols=13,
+                                              style='Table Grid')
+                    table = Character
+                    line = session.query(Character).count()
+                    self.ui.qTable = session.query(Character).all()
+                    collums = ['id', 'name', 'power', 'agility', 'body_type', 'intellect', 'wisdom', 'charisma',
+                               'acc_id', 'var_races_id', 'class_id', 'weap_id', 'arm_id']
+                z = 0
+                for j in collums:
+                    table_1.cell(0, z).text = j
+                    z += 1
+                sort = [0] * line
+                z = 0
+                for j in session.query(table).all():
+                    sort[z] = j.id
+                    z += 1
+                sort.sort()
+                perem = 0
+                z = 0
+                for j in sort:
+                    z += 1
+                    for row, form in enumerate(self.ui.qTable):
+                        col = 0
+                        for c in collums:
+                            for k, v in vars(form).items():
+                                if c == k:
+                                    if c == 'id':
+                                        perem = v
+                                    if ((c == 'id') & (v == j)) | ((c != 'id') & (perem == j)):
+                                        table_1.cell(z, col).text = str(v)
+                                        col += 1
+            stri = "/Users/chronos_386/Desktop/database_"
+            for i in range(15):
+                stri += str(random.randint(0, 9))
+            mydoc.save(stri + ".docx")
+        else:
+            table1 = pd.DataFrame({})
+            table2 = pd.DataFrame({})
+            table3 = pd.DataFrame({})
+            table4 = pd.DataFrame({})
+            table5 = pd.DataFrame({})
+            table6 = pd.DataFrame({})
+            table7 = pd.DataFrame({})
+            table8 = pd.DataFrame({})
+            table9 = pd.DataFrame({})
+            table10 = pd.DataFrame({})
+            table11 = pd.DataFrame({})
+            table12 = pd.DataFrame({})
+            table13 = pd.DataFrame({})
+            table14 = pd.DataFrame({})
+            table15 = pd.DataFrame({})
+            for i in range(15):
+                if i == 0:
+                    count = session.query(weapon_types).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    z = 0
+                    for j in session.query(weapon_types).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        z += 1
+                    table1 = pd.DataFrame({'id': collum1, 'Name': collum2})
+                if i == 1:
+                    count = session.query(armor_types).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    z = 0
+                    for j in session.query(armor_types).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        z += 1
+                    table2 = pd.DataFrame({'id': collum1, 'Name': collum2})
+                if i == 2:
+                    count = session.query(user_status).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    z = 0
+                    for j in session.query(user_status).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.status
+                        z += 1
+                    table3 = pd.DataFrame({'id': collum1, 'status': collum2})
+                if i == 3:
+                    count = session.query(descriptions).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    z = 0
+                    for j in session.query(descriptions).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.field
+                        z += 1
+                    table4 = pd.DataFrame({'id': collum1, 'field': collum2})
+                if i == 4:
+                    count = session.query(Races).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [""] * count
+                    collum4 = [""] * count
+                    collum5 = [""] * count
+                    collum6 = [0] * count
+                    collum7 = [0] * count
+                    z = 0
+                    for j in session.query(Races).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        collum3[z] = j.incr_char
+                        collum4[z] = j.worldview
+                        collum5[z] = j.size
+                        collum6[z] = j.speed
+                        collum7[z] = j.descr_id
+                        z += 1
+                    table5 = pd.DataFrame({'id': collum1, 'name': collum2, 'incr_char': collum3, 'worldview': collum4,
+                                           'size': collum5, 'speed': collum6, 'descr_id': collum7})
+                if i == 5:
+                    count = 14#session.query(var_races).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [""] * count
+                    collum4 = [""] * count
+                    collum5 = [0] * count
+                    collum6 = [0] * count
+                    z = 0
+                    for j in session.query(var_races).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        collum3[z] = j.incr_char
+                        collum4[z] = j.add_feat
+                        collum5[z] = j.rac_id
+                        collum6[z] = j.descr_id
+                        z += 1
+                    table6 = pd.DataFrame({'id': collum1, 'name': collum2, 'incr_char': collum3, 'add_feat': collum4,
+                                           'rac_id': collum5, 'descr_id': collum6})
+                if i == 6:
+                    count = session.query(Accounts).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [""] * count
+                    collum4 = [0] * count
+                    z = 0
+                    for j in session.query(Accounts).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.login
+                        collum3[z] = j.password
+                        collum4[z] = j.stat_id
+                        z += 1
+                    table7 = pd.DataFrame({'id': collum1, 'login': collum2, 'password': collum3, 'stat_id': collum4})
+                if i == 7:
+                    count = session.query(Classes).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [0] * count
+                    collum4 = [0] * count
+                    collum5 = [0] * count
+                    z = 0
+                    for j in session.query(Classes).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        collum3[z] = j.master_bonus
+                        collum4[z] = j.numb_av_spells
+                        collum5[z] = j.descr_id
+                        z += 1
+                    table8 = pd.DataFrame({'id': collum1, 'name': collum2, 'master_bonus': collum3,
+                                           'numb_av_spells': collum4, 'descr_id': collum5})
+                if i == 8:
+                    count = session.query(Weapon).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [0] * count
+                    collum4 = [0] * count
+                    collum5 = [0] * count
+                    collum6 = [0] * count
+                    z = 0
+                    for j in session.query(Weapon).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        collum3[z] = j.price
+                        collum4[z] = j.damage
+                        collum5[z] = j.weight
+                        collum6[z] = j.weap_t_id
+                        z += 1
+                    table9 = pd.DataFrame({'id': collum1, 'name': collum2, 'price': collum3,
+                                           'damage': collum4, 'weight': collum5, 'weap_t_id': collum6})
+                if i == 9:
+                    count = session.query(Armor).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [0] * count
+                    collum4 = [0] * count
+                    collum5 = [0] * count
+                    collum6 = [0] * count
+                    z = 0
+                    for j in session.query(Armor).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        collum3[z] = j.price
+                        collum4[z] = j.steal_hindr
+                        collum5[z] = j.weight
+                        collum6[z] = j.arm_t_id
+                        z += 1
+                    table10 = pd.DataFrame({'id': collum1, 'name': collum2, 'price': collum3,
+                                           'steal_hindr': collum4, 'weight': collum5, 'arm_t_id': collum6})
+                if i == 10:
+                    count = session.query(Spell_table).count()
+                    collum1 = [0] * count
+                    collum2 = [""] * count
+                    collum3 = [0] * count
+                    collum4 = [0] * count
+                    collum5 = [0] * count
+                    collum6 = [0] * count
+                    z = 0
+                    for j in session.query(Spell_table).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.name
+                        collum3[z] = j.level
+                        collum4[z] = j.distance
+                        collum5[z] = j.duration
+                        collum6[z] = j.descr_id
+                        z += 1
+                    table11 = pd.DataFrame({'id': collum1, 'name': collum2, 'level': collum3,
+                                           'distance': collum4, 'duration': collum5, 'descr_id': collum6})
+                if i == 11:
+                    count = 21#session.query(Relat_table_t_weap_t_cl).count()
+                    collum1 = [0] * count
+                    collum2 = [0] * count
+                    collum3 = [0] * count
+                    z = 0
+                    for j in session.query(Relat_table_t_weap_t_cl).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.weap_t_id
+                        collum3[z] = j.class_id
+                        z += 1
+                    table12 = pd.DataFrame({'id': collum1, 'weap_t_id': collum2, 'class_id': collum3})
+                if i == 12:
+                    count = 25#session.query(Relat_table_t_arm_t_cl).count()
+                    collum1 = [0] * count
+                    collum2 = [0] * count
+                    collum3 = [0] * count
+                    z = 0
+                    for j in session.query(Relat_table_t_arm_t_cl).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.arm_t_id
+                        collum3[z] = j.class_id
+                        z += 1
+                    table13 = pd.DataFrame({'id': collum1, 'arm_t_id': collum2, 'class_id': collum3})
+                if i == 13:
+                    count = 28#session.query(Relat_table_t_spell_cl).count()
+                    collum1 = [0] * count
+                    collum2 = [0] * count
+                    collum3 = [0] * count
+                    z = 0
+                    for j in session.query(Relat_table_t_spell_cl).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.spell_id
+                        collum3[z] = j.class_id
+                        z += 1
+                    table14 = pd.DataFrame({'id': collum1, 'spell_id': collum2, 'class_id': collum3})
+                if i == 14:
+                    count = session.query(Character).count()
+                    collum1 = [0] * count
+                    collum2 = [0] * count
+                    collum3 = [0] * count
+                    collum4 = [0] * count
+                    collum5 = [0] * count
+                    collum6 = [0] * count
+                    collum7 = [0] * count
+                    collum8 = [0] * count
+                    collum9 = [0] * count
+                    collum10 = [0] * count
+                    collum11 = [0] * count
+                    collum12 = [0] * count
+                    collum13 = [0] * count
+                    z = 0
+                    for j in session.query(Character).all():
+                        collum1[z] = j.id
+                        collum2[z] = j.power
+                        collum3[z] = j.agility
+                        collum4[z] = j.body_type
+                        collum5[z] = j.intellect
+                        collum6[z] = j.wisdom
+                        collum7[z] = j.charisma
+                        collum8[z] = j.acc_id
+                        collum9[z] = j.var_races_id
+                        collum10[z] = j.class_id
+                        collum11[z] = j.weap_id
+                        collum12[z] = j.arm_id
+                        collum13[z] = j.name
+                        z += 1
+                    table15 = pd.DataFrame({'id': collum1, 'name': collum13, 'power': collum2,
+                                            'agility': collum3, 'body_type': collum4, 'intellect': collum5,
+                                            'wisdom': collum6, 'charisma': collum7, 'acc_id': collum8,
+                                            'var_races_id': collum9, 'class_id': collum10, 'weap_id': collum11,
+                                            'arm_id': collum12})
+            salary_sheets = {'Типы оружия': table1, 'Типы брони': table2, 'Статусы пользователей': table3,
+                             'Описания': table4, 'Расы': table5, 'Разновидности рас': table6,
+                             'Аккаунты': table7, 'Классы': table8, 'Оружие': table9, 'Броня': table10,
+                             'Таблица заклинаний': table11, 'Отношения типов оржия и классов': table12,
+                             'Отношения типов брони и классов': table13, 'Отношения заклинаний и классов': table14,
+                             'Таблица персонажей': table15}
+            stri = "/Users/chronos_386/Desktop/database_"
+            for i in range(15):
+                stri += str(random.randint(0, 9))
+            writer = pd.ExcelWriter('./database123456.xlsx', engine='xlsxwriter')
+            for sheet_name in salary_sheets.keys():
+                salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
+            writer.save()
 
     def create_p(self):
         self.hide()
