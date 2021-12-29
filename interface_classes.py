@@ -13,6 +13,7 @@ import docx
 import pandas as pd
 
 
+# Панель администратора базы данных
 class Admin_db_Panel(QMainWindow):
     def __init__(self, parent=None):
         super(Admin_db_Panel, self).__init__(parent)
@@ -24,6 +25,7 @@ class Admin_db_Panel(QMainWindow):
         self.ui.pushButton_4.clicked.connect(lambda: self.undo_change())
         self.ui.action.triggered.connect(lambda: self.exit_db_panel())
 
+    # Вывод таблицы
     def show_table(self):
         self.ui.comboBox_2.clear()
         self.ui.comboBox_3.clear()
@@ -175,6 +177,7 @@ class Admin_db_Panel(QMainWindow):
                                        "selection-background-color: rgb(85, 255, 127);")
         self.ui.listView.resizeColumnsToContents()
 
+    # Изменение таблицы
     def change_table(self):
         self.ui.statusbar.clearMessage()
         if self.ui.prov == 0:
@@ -409,6 +412,7 @@ class Admin_db_Panel(QMainWindow):
         except:
             self.ui.statusbar.showMessage("Произошла ошибка")
 
+    # Подтвердить изменения
     def confirm_change(self):
         if self.ui.prov != 0:
             session.commit()
@@ -417,6 +421,7 @@ class Admin_db_Panel(QMainWindow):
         else:
             self.ui.statusbar.showMessage("Сначала внесите изменение в таблицу")
 
+    # Отменить изменения
     def undo_change(self):
         if self.ui.prov != 0:
             session.rollback()
@@ -425,12 +430,14 @@ class Admin_db_Panel(QMainWindow):
         else:
             self.ui.statusbar.showMessage("Сначала внесите изменение в таблицу")
 
+    # Выход из панели администратора обратно в меню
     def exit_db_panel(self):
         self.hide()
         dialog = AdminMenu(parent=self)
         dialog.show()
 
 
+# Панель входа
 class log_panel(QMainWindow):
     def __init__(self, parent=None):
         super(log_panel, self).__init__(parent)
@@ -439,6 +446,7 @@ class log_panel(QMainWindow):
         self.ui.pushButton.clicked.connect(lambda: self.inter_to_app())
         self.ui.pushButton_2.clicked.connect(lambda: self.create_acc())
 
+    # Войти в аккаунт
     def inter_to_app(self):
         log = self.ui.textEdit.toPlainText()
         pasw = self.ui.textEdit_2.toPlainText()
@@ -465,6 +473,7 @@ class log_panel(QMainWindow):
                     return
         self.ui.statusbar.showMessage("Введено несуществующее имя пользователя")
 
+    # Создать аккаунт
     def create_acc(self):
         log = self.ui.textEdit.toPlainText()
         pasw = self.ui.textEdit_2.toPlainText()
@@ -487,6 +496,7 @@ class log_panel(QMainWindow):
         dialog.show()
 
 
+# Окно описания
 class descri(QMainWindow):
     def __init__(self, parent=None):
         super(descri, self).__init__(parent)
@@ -511,6 +521,7 @@ class descri(QMainWindow):
         self.ui.textBrowser.insertPlainText(lol.add_feat)
 
 
+# Окно описания заклинания
 class desc_spell(QMainWindow):
     def __init__(self, parent=None):
         super(desc_spell, self).__init__(parent)
@@ -530,6 +541,7 @@ class desc_spell(QMainWindow):
         self.ui.textBrowser_4.insertPlainText(str(spell.duration) + " мин.")
 
 
+# Окно создания персонажа
 class CreatePers(QMainWindow):
     def __init__(self, parent=None):
         super(CreatePers, self).__init__(parent)
@@ -547,6 +559,7 @@ class CreatePers(QMainWindow):
         self.ui.pushButton_3.clicked.connect(lambda: self.show_weap_inform())
         self.ui.pushButton_8.clicked.connect(lambda: self.create_pers())
 
+    # Создание персонажа
     def create_pers(self):
         if self.ui.comboBox_5.currentText() == "":
             self.ui.statusbar.showMessage("Сначала выберите расу и её разновидность")
@@ -575,16 +588,20 @@ class CreatePers(QMainWindow):
         new_2 = session.query(Classes).filter_by(name=class_name).first()
         new_3 = session.query(Weapon).filter_by(name=weap_name).first()
         new_4 = session.query(Armor).filter_by(name=arm_name).first()
-        user_setting = Character(id=session.query(Character).count() + 1, name=named, power=int(self.ui.textBrowser_9.toPlainText()),
-                                    agility=int(self.ui.textBrowser_8.toPlainText()), body_type=int(self.ui.textBrowser_7.toPlainText()),
-                                    intellect=int(self.ui.textBrowser_5.toPlainText()), wisdom=int(self.ui.textBrowser_4.toPlainText()),
-                                    charisma=int(self.ui.textBrowser_6.toPlainText()), acc_id=MyGlobals.id,
-                                    var_races_id=int(new.id), class_id=int(new_2.id), weap_id=int(new_3.id),
-                                    arm_id=int(new_4.id))
+        user_setting = Character(id=session.query(Character).count() + 1, name=named,
+                                 power=int(self.ui.textBrowser_9.toPlainText()),
+                                 agility=int(self.ui.textBrowser_8.toPlainText()),
+                                 body_type=int(self.ui.textBrowser_7.toPlainText()),
+                                 intellect=int(self.ui.textBrowser_5.toPlainText()),
+                                 wisdom=int(self.ui.textBrowser_4.toPlainText()),
+                                 charisma=int(self.ui.textBrowser_6.toPlainText()), acc_id=MyGlobals.id,
+                                 var_races_id=int(new.id), class_id=int(new_2.id), weap_id=int(new_3.id),
+                                 arm_id=int(new_4.id))
         session.add(user_setting)
         session.commit()
         self.ret_to_menu()
 
+    # Рандомные стартовые характеристики
     def rand_ch(self):
         self.ui.textBrowser_9.clear()
         self.ui.textBrowser_8.clear()
@@ -612,6 +629,7 @@ class CreatePers(QMainWindow):
             if j == 5:
                 self.ui.textBrowser_6.insertPlainText(str(mas[1] + mas[2] + mas[3]))
 
+    # Стандартные стартовые характеристики
     def stand_ch(self):
         self.ui.textBrowser_9.clear()
         self.ui.textBrowser_8.clear()
@@ -642,6 +660,7 @@ class CreatePers(QMainWindow):
             self.ui.textBrowser_4.insertPlainText("13")
             self.ui.textBrowser_6.insertPlainText("12")
 
+    # Показать всё, что связано с выбранной бронёй
     def show_arm_inform(self):
         self.ui.textBrowser_16.clear()
         self.ui.textBrowser_17.clear()
@@ -657,6 +676,7 @@ class CreatePers(QMainWindow):
         else:
             self.ui.textBrowser_18.insertPlainText("Отсутствует")
 
+    # Показать всё, что связано с оружием
     def show_weap_inform(self):
         self.ui.textBrowser_11.clear()
         self.ui.textBrowser_12.clear()
@@ -669,6 +689,7 @@ class CreatePers(QMainWindow):
         self.ui.textBrowser_14.insertPlainText(str(pop.weight) + " фнт.")
         self.ui.textBrowser_11.insertPlainText(str(pop.damage))
 
+    # Показать информацию о заклинании
     def spell_inform(self):
         spell = self.ui.comboBox_6.currentText()
         if spell == "":
@@ -680,12 +701,14 @@ class CreatePers(QMainWindow):
             dialog.show()
             dialog.des_show(pop.id)
 
+    # Добавить в комбобоксы элементы
     def add_combo(self):
         for i in session.query(Classes).all():
             self.ui.comboBox_3.addItem(i.name)
         for i in session.query(Races).all():
             self.ui.comboBox_4.addItem(i.name)
 
+    # Вернуться обратно в меню
     def ret_to_menu(self):
         self.hide()
         pop = session.query(Accounts).filter_by(id=MyGlobals.id).first()
@@ -695,6 +718,7 @@ class CreatePers(QMainWindow):
             dialog = PolsMenu(parent=self)
         dialog.show()
 
+    # Показать всё, что связано с выбранной расой
     def show_race_inform(self):
         self.ui.textBrowser.clear()
         self.ui.comboBox_5.clear()
@@ -704,9 +728,10 @@ class CreatePers(QMainWindow):
                 self.ui.comboBox_5.addItem(i.name)
         new_2 = session.query(descriptions).filter_by(id=new.descr_id).first()
         self.ui.textBrowser.insertPlainText(new_2.field + "\n\nМировозрение:\n" + new.worldview + "\n\nРазмер:\n" +
-                                              new.size + "\n\nСкорость: " + str(new.speed) + " футов" +
-                                              "\n\nПовышение характеристик:\n" + new.incr_char)
+                                            new.size + "\n\nСкорость: " + str(new.speed) + " футов" +
+                                            "\n\nПовышение характеристик:\n" + new.incr_char)
 
+    # Показать всё, что связано с выбранной разновидностью расы
     def show_var_race_inform(self):
         self.ui.textBrowser_3.clear()
         named = self.ui.comboBox_5.currentText()
@@ -718,6 +743,7 @@ class CreatePers(QMainWindow):
         self.ui.textBrowser_3.insertPlainText(new_2.field + "\n\nДоп. способность:\n" + new.add_feat +
                                               "\n\nПовышение характеристик:\n" + new.incr_char)
 
+    # Показать всё, что связано с выбранным классом
     def show_class_inform(self):
         self.ui.textBrowser_2.clear()
         self.ui.comboBox.clear()
@@ -744,6 +770,7 @@ class CreatePers(QMainWindow):
         self.ui.textBrowser_2.insertPlainText(new_2.field + "\n\nБонус мастерства: " + str(new.master_bonus))
 
 
+# Главное меню администратора БД
 class AdminMenu(QMainWindow):
     def __init__(self, parent=None):
         super(AdminMenu, self).__init__(parent)
@@ -767,6 +794,7 @@ class AdminMenu(QMainWindow):
         self.ui.pushButton_6.clicked.connect(lambda: self.descr())
         self.ui.pushButton_4.clicked.connect(lambda: self.vugr_db())
 
+    # Выгрузка БД в Docx или Xlsx
     def vugr_db(self):
         if self.ui.comboBox_2.currentText() == "В docx":
             mydoc = docx.Document()
@@ -991,7 +1019,7 @@ class AdminMenu(QMainWindow):
                     table5 = pd.DataFrame({'id': collum1, 'name': collum2, 'incr_char': collum3, 'worldview': collum4,
                                            'size': collum5, 'speed': collum6, 'descr_id': collum7})
                 if i == 5:
-                    count = 14#session.query(var_races).count()
+                    count = 14  # session.query(var_races).count()
                     collum1 = [0] * count
                     collum2 = [""] * count
                     collum3 = [""] * count
@@ -1077,7 +1105,7 @@ class AdminMenu(QMainWindow):
                         collum6[z] = j.arm_t_id
                         z += 1
                     table10 = pd.DataFrame({'id': collum1, 'name': collum2, 'price': collum3,
-                                           'steal_hindr': collum4, 'weight': collum5, 'arm_t_id': collum6})
+                                            'steal_hindr': collum4, 'weight': collum5, 'arm_t_id': collum6})
                 if i == 10:
                     count = session.query(Spell_table).count()
                     collum1 = [0] * count
@@ -1096,9 +1124,9 @@ class AdminMenu(QMainWindow):
                         collum6[z] = j.descr_id
                         z += 1
                     table11 = pd.DataFrame({'id': collum1, 'name': collum2, 'level': collum3,
-                                           'distance': collum4, 'duration': collum5, 'descr_id': collum6})
+                                            'distance': collum4, 'duration': collum5, 'descr_id': collum6})
                 if i == 11:
-                    count = 21#session.query(Relat_table_t_weap_t_cl).count()
+                    count = 21  # session.query(Relat_table_t_weap_t_cl).count()
                     collum1 = [0] * count
                     collum2 = [0] * count
                     collum3 = [0] * count
@@ -1110,7 +1138,7 @@ class AdminMenu(QMainWindow):
                         z += 1
                     table12 = pd.DataFrame({'id': collum1, 'weap_t_id': collum2, 'class_id': collum3})
                 if i == 12:
-                    count = 25#session.query(Relat_table_t_arm_t_cl).count()
+                    count = 25  # session.query(Relat_table_t_arm_t_cl).count()
                     collum1 = [0] * count
                     collum2 = [0] * count
                     collum3 = [0] * count
@@ -1122,7 +1150,7 @@ class AdminMenu(QMainWindow):
                         z += 1
                     table13 = pd.DataFrame({'id': collum1, 'arm_t_id': collum2, 'class_id': collum3})
                 if i == 13:
-                    count = 28#session.query(Relat_table_t_spell_cl).count()
+                    count = 28  # session.query(Relat_table_t_spell_cl).count()
                     collum1 = [0] * count
                     collum2 = [0] * count
                     collum3 = [0] * count
@@ -1183,27 +1211,32 @@ class AdminMenu(QMainWindow):
                 salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
             writer.save()
 
+    # Переходим в окно создания персонажа
     def create_p(self):
         self.hide()
         dialog = CreatePers(parent=self)
         dialog.show()
 
+    # Показ доступных персонажей
     def dost_pers(self):
         self.ui.comboBox.clear()
         for i in session.query(Character).all():
             if i.acc_id == MyGlobals.id:
                 self.ui.comboBox.addItem(i.name)
 
+    # Выход из аккаунта
     def out_acc(self):
         self.hide()
         dialog = log_panel(parent=self)
         dialog.show()
 
+    # Переход в панель администратора БД
     def go_to_db_pan(self):
         self.hide()
         dialog = Admin_db_Panel(parent=self)
         dialog.show()
 
+    # Удаление персонажа
     def dell_pers(self):
         named = self.ui.comboBox.currentText()
         pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
@@ -1213,6 +1246,7 @@ class AdminMenu(QMainWindow):
         self.ui.comboBox.clear()
         self.dost_pers()
 
+    # Очистка всего окна
     def clear_all(self):
         self.ui.textBrowser_9.clear()
         self.ui.textBrowser_8.clear()
@@ -1235,6 +1269,7 @@ class AdminMenu(QMainWindow):
         self.ui.textBrowser_16.clear()
         self.ui.textBrowser_19.clear()
 
+    # Узнать о персонаже подробнее
     def descr(self):
         spell = self.ui.comboBox_3.currentText()
         opre = self.ui.comboBox_4.currentText()
@@ -1285,6 +1320,7 @@ class AdminMenu(QMainWindow):
             dialog.show()
             dialog.dop_sp_show(pop)
 
+    # Показать информацио о персонаже
     def show_pers_inform(self):
         self.clear_all()
         named = self.ui.comboBox.currentText()
@@ -1374,6 +1410,7 @@ class AdminMenu(QMainWindow):
         self.ui.textBrowser_19.insertPlainText(save_2.name)
 
 
+# Меню обычного пользователя
 class PolsMenu(QMainWindow):
     def __init__(self, parent=None):
         super(PolsMenu, self).__init__(parent)
@@ -1393,11 +1430,13 @@ class PolsMenu(QMainWindow):
         self.ui.pushButton_2.clicked.connect(lambda: self.create_p())
         self.ui.pushButton_4.clicked.connect(lambda: self.descr())
 
+    # Переход в создание персонажа
     def create_p(self):
         self.hide()
         dialog = CreatePers(parent=self)
         dialog.show()
 
+    # Описание чего-то конкретного о персонаже
     def descr(self):
         spell = self.ui.comboBox_3.currentText()
         opre = self.ui.comboBox_4.currentText()
@@ -1448,12 +1487,14 @@ class PolsMenu(QMainWindow):
             dialog.show()
             dialog.dop_sp_show(pop)
 
+    # Показ доступных персонажей
     def dost_pers(self):
         self.ui.comboBox.clear()
         for i in session.query(Character).all():
             if i.acc_id == MyGlobals.id:
                 self.ui.comboBox.addItem(i.name)
 
+    # Очистка всех элементов окна
     def clear_all(self):
         self.ui.textBrowser_9.clear()
         self.ui.textBrowser_8.clear()
@@ -1476,6 +1517,7 @@ class PolsMenu(QMainWindow):
         self.ui.textBrowser_16.clear()
         self.ui.textBrowser_19.clear()
 
+    # Удаление персонажа
     def dell_pers(self):
         named = self.ui.comboBox.currentText()
         pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
@@ -1485,11 +1527,13 @@ class PolsMenu(QMainWindow):
         self.ui.comboBox.clear()
         self.dost_pers()
 
+    # Выход из аккаунта
     def out_acc(self):
         self.hide()
         dialog = log_panel(parent=self)
         dialog.show()
 
+    # Показ информации о персонаже
     def show_pers_inform(self):
         self.clear_all()
         named = self.ui.comboBox.currentText()

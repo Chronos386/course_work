@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, insert, delete, update
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy.orm import sessionmaker
-
 from sqlalchemy.ext.declarative import declarative_base
 
 

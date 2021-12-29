@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 
+# Окно описания
 class descrip(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

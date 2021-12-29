@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 
+# Создание персонажа
 class create_per(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

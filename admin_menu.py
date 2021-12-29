@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 
+# Меню администратора
 class adm_menu(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

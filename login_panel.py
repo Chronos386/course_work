@@ -5,6 +5,7 @@ import time
 import sys
 
 
+# Окно входа в аккаунт
 class login_panell:
     def __init__(self):
         self.app = QtWidgets.QApplication(sys.argv)

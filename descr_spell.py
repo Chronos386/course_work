@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 
+# Окно описания заклинаний
 class descript_spell(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

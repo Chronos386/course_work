@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 import sys
 
 
+# Панель администратора БД
 class Ui_MainWindow:
     def __init__(self):
         self.action = None
