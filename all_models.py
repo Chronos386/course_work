@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 class MyGlobals(object):
-    id = 1
+    id = 0
     descr = 0
 
 
