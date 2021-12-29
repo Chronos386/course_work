@@ -195,35 +195,100 @@ class Admin_db_Panel(QMainWindow):
             if result == "Типы оружия":
                 table = weapon_types
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=text)
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=text)
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
                     query.name = text
             if result == "Типы брони":
                 table = armor_types
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=text)
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=text)
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
                     query.name = text
             if result == "Статусы пользователя":
                 table = user_status
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, status=text)
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, status=text)
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
                     query.status = text
             if result == "Описания":
                 table = descriptions
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, field=text)
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, field=text)
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
                     query.field = text
             if result == "Расы":
                 table = Races
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], incr_char=lis[1],
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0], incr_char=lis[1],
                                          worldview=lis[2], size=lis[3], speed=int(lis[4]), descr_id=int(lis[5]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -242,7 +307,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Разновидности рас":
                 table = var_races
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], incr_char=lis[1],
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0], incr_char=lis[1],
                                          add_feat=lis[2], rac_id=int(lis[3]), descr_id=int(lis[4]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -259,7 +337,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Аккаунты":
                 table = Accounts
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, login=lis[0], password=lis[1],
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, login=lis[0], password=lis[1],
                                          stat_id=int(lis[2]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -272,7 +363,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Классы":
                 table = Classes
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0],
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0],
                                          master_bonus=int(lis[1]),
                                          numb_av_spells=int(lis[2]), descr_id=int(lis[3]))
                 if change == "Обновить элемент":
@@ -288,7 +392,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Оружие":
                 table = Weapon
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], price=int(lis[1]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0], price=int(lis[1]),
                                          damage=int(lis[2]), weight=int(lis[3]), weap_t_id=int(lis[4]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -305,7 +422,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Броня":
                 table = Armor
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], price=int(lis[1]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0], price=int(lis[1]),
                                          steal_hindr=bool(lis[2]), weight=int(lis[3]), arm_t_id=int(lis[4]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -322,7 +452,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Таблица заклинаний":
                 table = Spell_table
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], level=int(lis[1]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0], level=int(lis[1]),
                                          distance=int(lis[2]), duration=int(lis[3]), descr_id=int(lis[4]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -339,7 +482,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Связи типов оружия и классов":
                 table = Relat_table_t_weap_t_cl
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, weap_t_id=int(lis[0]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, weap_t_id=int(lis[0]),
                                          class_id=int(lis[1]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -350,7 +506,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Связи типов доспехов и классов":
                 table = Relat_table_t_arm_t_cl
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, arm_t_id=int(lis[0]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, arm_t_id=int(lis[0]),
                                          class_id=int(lis[1]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -361,7 +530,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Связи заклинаний и классов":
                 table = Relat_table_t_spell_cl
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, spell_id=int(lis[0]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, spell_id=int(lis[0]),
                                          class_id=int(lis[1]))
                 if change == "Обновить элемент":
                     query = session.query(table).filter(table.id == stri).first()
@@ -372,7 +554,20 @@ class Admin_db_Panel(QMainWindow):
             if result == "Персонаж":
                 table = Character
                 if change == "Добавить строку":
-                    user_setting = table(id=session.query(table).count() + 1, name=lis[0], power=int(lis[1]),
+                    f = 0  # флаг
+                    line = session.query(table).count()
+                    tabl = session.query(table).all()
+                    free_id2 = 1  # свободный индекс
+                    while f == 0:
+                        for i in range(line):
+                            if free_id2 == tabl[i].id:
+                                f = 1
+                        if f == 1:
+                            free_id2 = free_id2 + 1
+                            f = 0
+                        else:
+                            f = 1
+                    user_setting = table(id=free_id2, name=lis[0], power=int(lis[1]),
                                          agility=int(lis[2]), body_type=int(lis[3]), intellect=int(lis[4]),
                                          wisdom=int(lis[5]), charisma=int(lis[6]), acc_id=int(lis[7]),
                                          var_races_id=int(lis[8]), class_id=int(lis[9]), weap_id=int(lis[10]),
@@ -588,7 +783,20 @@ class CreatePers(QMainWindow):
         new_2 = session.query(Classes).filter_by(name=class_name).first()
         new_3 = session.query(Weapon).filter_by(name=weap_name).first()
         new_4 = session.query(Armor).filter_by(name=arm_name).first()
-        user_setting = Character(id=session.query(Character).count() + 1, name=named,
+        f = 0  # флаг
+        line = session.query(Character).count()
+        tabl = session.query(Character).all()
+        free_id2 = 1  # свободный индекс
+        while f == 0:
+            for i in range(line):
+                if free_id2 == tabl[i].id:
+                    f = 1
+            if f == 1:
+                free_id2 = free_id2 + 1
+                f = 0
+            else:
+                f = 1
+        user_setting = Character(id=free_id2, name=named,
                                  power=int(self.ui.textBrowser_9.toPlainText()),
                                  agility=int(self.ui.textBrowser_8.toPlainText()),
                                  body_type=int(self.ui.textBrowser_7.toPlainText()),
@@ -796,7 +1004,7 @@ class AdminMenu(QMainWindow):
 
     # Выгрузка БД в Docx или Xlsx
     def vugr_db(self):
-        if self.ui.comboBox_2.currentText() == "В docx":
+        if self.ui.comboBox_2.currentText() == "В Docx":
             mydoc = docx.Document()
             for i in range(15):
                 table_1 = mydoc.add_table(rows=0, cols=0, style='Table Grid')
