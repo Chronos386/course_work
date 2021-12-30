@@ -1,4 +1,3 @@
-import os
 import mimetypes
 from email import encoders
 from email.mime.base import MIMEBase
@@ -19,7 +18,7 @@ def send_email(filepath):
     msg_text = "Копия: "
 
     addr_from = "popersoniy@gmail.com"
-    password = "*************"
+    password = "************"
 
     msg = MIMEMultipart()
     msg['From'] = addr_from

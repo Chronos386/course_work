@@ -685,8 +685,22 @@ class log_panel(QMainWindow):
             if log == i.login:
                 self.ui.statusbar.showMessage("Пользователь с таким логином уже существует")
                 return
-        user_setting = Accounts(id=session.query(Accounts).count() + 1, login=log, password=pasw,
+        f = 0  # флаг
+        line = session.query(table).count()
+        tabl = session.query(table).all()
+        free_id2 = 1  # свободный индекс
+        while f == 0:
+            for i in range(line):
+                if free_id2 == tabl[i].id:
+                    f = 1
+            if f == 1:
+                free_id2 = free_id2 + 1
+                f = 0
+            else:
+                f = 1
+        user_setting = Accounts(id=free_id2, login=log, password=pasw,
                                 stat_id=int(2))
+        MyGlobals.id = free_id2
         session.add(user_setting)
         session.commit()
         dump_sqlalchemy()
@@ -804,9 +818,9 @@ class CreatePers(QMainWindow):
                                  power=int(self.ui.textBrowser_9.toPlainText()),
                                  agility=int(self.ui.textBrowser_8.toPlainText()),
                                  body_type=int(self.ui.textBrowser_7.toPlainText()),
-                                 intellect=int(self.ui.textBrowser_5.toPlainText()),
-                                 wisdom=int(self.ui.textBrowser_4.toPlainText()),
-                                 charisma=int(self.ui.textBrowser_6.toPlainText()), acc_id=MyGlobals.id,
+                                 intellect=int(self.ui.textBrowser_6.toPlainText()),
+                                 wisdom=int(self.ui.textBrowser_5.toPlainText()),
+                                 charisma=int(self.ui.textBrowser_4.toPlainText()), acc_id=MyGlobals.id,
                                  var_races_id=int(new.id), class_id=int(new_2.id), weap_id=int(new_3.id),
                                  arm_id=int(new_4.id))
         session.add(user_setting)
