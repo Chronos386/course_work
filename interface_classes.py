@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog
 from PyQt5.QtWidgets import QTableWidgetItem
+from backup_db import *
 from all_models import *
 from adm_db_panel import Ui_MainWindow
 from login_panel import login_panell
@@ -326,6 +327,7 @@ class Admin_db_Panel(QMainWindow):
                     query = session.query(table).filter(table.id == stri).first()
                     if stlb == "name":
                         query.name = text
+                        print(query.name)
                     if stlb == "incr_char":
                         query.incr_char = text
                     if stlb == "add_feat":
@@ -611,6 +613,7 @@ class Admin_db_Panel(QMainWindow):
     def confirm_change(self):
         if self.ui.prov != 0:
             session.commit()
+            dump_sqlalchemy()
             self.ui.prov = 0
             self.show_table()
         else:
@@ -686,6 +689,7 @@ class log_panel(QMainWindow):
                                 stat_id=int(2))
         session.add(user_setting)
         session.commit()
+        dump_sqlalchemy()
         self.hide()
         dialog = PolsMenu(parent=self)
         dialog.show()
@@ -807,6 +811,7 @@ class CreatePers(QMainWindow):
                                  arm_id=int(new_4.id))
         session.add(user_setting)
         session.commit()
+        dump_sqlalchemy()
         self.ret_to_menu()
 
     # Рандомные стартовые характеристики
@@ -1021,9 +1026,9 @@ class AdminMenu(QMainWindow):
                 if i == 1:
                     mydoc.add_paragraph("Таблица типов брони (armor_types):")
                     table_1 = mydoc.add_table(rows=session.query(armor_types).count() + 1, cols=2, style='Table Grid')
-                    table = weapon_types
-                    line = session.query(weapon_types).count()
-                    self.ui.qTable = session.query(weapon_types).all()
+                    table = armor_types
+                    line = session.query(armor_types).count()
+                    self.ui.qTable = session.query(armor_types).all()
                     collums = ['id', 'name']
                 if i == 2:
                     mydoc.add_paragraph("Таблица статусов пользователя (user_status):")
@@ -1411,9 +1416,6 @@ class AdminMenu(QMainWindow):
                              'Таблица заклинаний': table11, 'Отношения типов оржия и классов': table12,
                              'Отношения типов брони и классов': table13, 'Отношения заклинаний и классов': table14,
                              'Таблица персонажей': table15}
-            stri = "/Users/chronos_386/Desktop/database_"
-            for i in range(15):
-                stri += str(random.randint(0, 9))
             writer = pd.ExcelWriter('./database123456.xlsx', engine='xlsxwriter')
             for sheet_name in salary_sheets.keys():
                 salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
@@ -1450,6 +1452,7 @@ class AdminMenu(QMainWindow):
         pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
         session.query(Character).filter_by(id=pop.id).delete(synchronize_session=False)
         session.commit()
+        dump_sqlalchemy()
         self.clear_all()
         self.ui.comboBox.clear()
         self.dost_pers()
@@ -1731,6 +1734,7 @@ class PolsMenu(QMainWindow):
         pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
         session.query(Character).filter_by(id=pop.id).delete(synchronize_session=False)
         session.commit()
+        dump_sqlalchemy()
         self.clear_all()
         self.ui.comboBox.clear()
         self.dost_pers()
