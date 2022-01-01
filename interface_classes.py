@@ -613,7 +613,7 @@ class Admin_db_Panel(QMainWindow):
     def confirm_change(self):
         if self.ui.prov != 0:
             session.commit()
-            dump_sqlalchemy()
+            DumpPostgreSql()
             self.ui.prov = 0
             self.show_table()
         else:
@@ -686,8 +686,8 @@ class log_panel(QMainWindow):
                 self.ui.statusbar.showMessage("Пользователь с таким логином уже существует")
                 return
         f = 0  # флаг
-        line = session.query(table).count()
-        tabl = session.query(table).all()
+        line = session.query(Accounts).count()
+        tabl = session.query(Accounts).all()
         free_id2 = 1  # свободный индекс
         while f == 0:
             for i in range(line):
@@ -703,7 +703,7 @@ class log_panel(QMainWindow):
         MyGlobals.id = free_id2
         session.add(user_setting)
         session.commit()
-        dump_sqlalchemy()
+        DumpPostgreSql()
         self.hide()
         dialog = PolsMenu(parent=self)
         dialog.show()
@@ -825,7 +825,7 @@ class CreatePers(QMainWindow):
                                  arm_id=int(new_4.id))
         session.add(user_setting)
         session.commit()
-        dump_sqlalchemy()
+        DumpPostgreSql()
         self.ret_to_menu()
 
     # Рандомные стартовые характеристики
@@ -1466,7 +1466,7 @@ class AdminMenu(QMainWindow):
         pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
         session.query(Character).filter_by(id=pop.id).delete(synchronize_session=False)
         session.commit()
-        dump_sqlalchemy()
+        DumpPostgreSql()
         self.clear_all()
         self.ui.comboBox.clear()
         self.dost_pers()
@@ -1748,7 +1748,7 @@ class PolsMenu(QMainWindow):
         pop = session.query(Character).filter_by(name=named, acc_id=MyGlobals.id).first()
         session.query(Character).filter_by(id=pop.id).delete(synchronize_session=False)
         session.commit()
-        dump_sqlalchemy()
+        DumpPostgreSql()
         self.clear_all()
         self.ui.comboBox.clear()
         self.dost_pers()
