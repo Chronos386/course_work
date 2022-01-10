@@ -7,9 +7,8 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
-import psycopg2
-import sys
 import time
+from subprocess import PIPE, Popen
 
 
 def send_email(filepath):
@@ -18,7 +17,7 @@ def send_email(filepath):
     msg_text = "Копия: "
 
     addr_from = "popersoniy@gmail.com"
-    password = "**************"
+    password = "**********"
 
     msg = MIMEMultipart()
     msg['From'] = addr_from
@@ -64,10 +63,6 @@ def add_file(msg, filepath):
         msg.attach(file)
 
 
-# "voff.chernih@yandex.ru"
-#ubtyhhdoejtyutex
-
-
 def CreateFileName(dbms):
     fileTime = time.localtime(time.time())
 
@@ -78,111 +73,18 @@ def CreateFileName(dbms):
     minute = fileTime.tm_min
     second = fileTime.tm_sec
 
-    filename = f"{month}-{day}-{year}_{hour}:{minute}:{second}_{dbms}_dump.sql"
+    filename = f"{month}-{day}-{year}_{hour}:{minute}:{second}_{dbms}_dump.dmp"
     return filename
 
 
 def DumpPostgreSql():
-    con = None
-    try:
-        con = psycopg2.connect(database='game_app', user='postgres', password='local', port='5432')
-        cur = con.cursor()
-        filename = CreateFileName('game_app')
-        f = open(filename, 'w')
-        f.write(
-            "CREATE TABLE weapon_types(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL\n);\n\n")
-        f.write(
-            "CREATE TABLE armor_types(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL\n);\n\n")
-        f.write(
-            "CREATE TABLE user_status(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    status VARCHAR (40) NOT NULL\n);\n\n")
-        f.write(
-            "CREATE TABLE descriptions(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    field VARCHAR (500) NOT NULL\n);\n\n")
-        f.write("CREATE TABLE Races(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    Incr_char VARCHAR (40) NOT NULL,\n    Worldview VARCHAR (500) NOT NULL,\n    size VARCHAR (500) NOT NULL,"
-                "\n    Speed INTEGER NOT NULL,\n    descr_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(descr_ID) "
-                "REFERENCES descriptions(ID)\n);\n\n")
-        f.write("CREATE TABLE var_races(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    Incr_char VARCHAR (40) NOT NULL,\n    Add_feat VARCHAR (500) NOT NULL,\n    rac_ID BIGSERIAL NOT NULL,"
-                "\n    FOREIGN KEY(rac_ID) REFERENCES Races(ID),\n    descr_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(descr_ID) "
-                "REFERENCES descriptions(ID)\n);\n\n")
-        f.write("CREATE TABLE Accounts(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Login VARCHAR (40) NOT NULL,\n"
-                "    Password VARCHAR (10) NOT NULL,\n    stat_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(stat_ID) REFERENCES "
-                "user_status(ID)\n);\n\n")
-        f.write("CREATE TABLE Classes(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    Master_bonus INTEGER NOT NULL,\n    numb_av_spells INTEGER NOT NULL,\n    descr_ID BIGSERIAL NOT NULL,"
-                "\n    FOREIGN KEY(descr_ID) REFERENCES descriptions(ID)\n);\n\n")
-        f.write("CREATE TABLE Weapon(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    Price INTEGER NOT NULL,\n    Damage INTEGER NOT NULL,\n    Weight INTEGER NOT NULL,"
-                "\n    weap_t_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(weap_t_ID) REFERENCES weapon_types(ID)\n);\n\n")
-        f.write("CREATE TABLE Armor(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    Price INTEGER NOT NULL,\n    Steal_hindr BOOL NOT NULL,\n    Weight INTEGER NOT NULL,"
-                "\n    arm_t_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(arm_t_ID) REFERENCES armor_types(ID)\n);\n\n")
-        f.write("CREATE TABLE Spell_table(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    level INTEGER NOT NULL,\n    Distance INTEGER NOT NULL,\n    Duration INTEGER NOT NULL,"
-                "\n    descr_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(descr_ID) REFERENCES descriptions(ID)\n);\n\n")
-        f.write(
-            "CREATE TABLE Relat_table_t_weap_t_cl(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    weap_t_ID BIGSERIAL NOT NULL,\n"
-            "    FOREIGN KEY(weap_t_ID) REFERENCES weapon_types(ID),\n    class_ID BIGSERIAL NOT NULL,\n    "
-            "FOREIGN KEY(class_ID) REFERENCES Classes(ID)\n);\n\n")
-        f.write(
-            "CREATE TABLE Relat_table_t_arm_t_cl(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    arm_t_ID BIGSERIAL NOT NULL,\n"
-            "    FOREIGN KEY(arm_t_ID) REFERENCES armor_types(ID),\n    class_ID BIGSERIAL NOT NULL,\n    "
-            "FOREIGN KEY(class_ID) REFERENCES Classes(ID)\n);\n\n")
-        f.write(
-            "CREATE TABLE Relat_table_t_spell_cl(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Spell_ID BIGSERIAL NOT NULL,\n"
-            "    FOREIGN KEY(Spell_ID) REFERENCES Spell_table(ID),\n    class_ID BIGSERIAL NOT NULL,\n    "
-            "FOREIGN KEY(class_ID) REFERENCES Classes(ID)\n);\n\n")
-        f.write("CREATE TABLE Character(\n    ID BIGSERIAL NOT NULL PRIMARY KEY,\n    Name VARCHAR (40) NOT NULL,\n"
-                "    Power INTEGER NOT NULL,\n    Agility INTEGER NOT NULL,\n    Body_type INTEGER NOT NULL,\n    Intellect "
-                "INTEGER NOT NULL,\n    Wisdom INTEGER NOT NULL,\n    Charisma INTEGER NOT NULL,\n    acc_ID "
-                "BIGSERIAL NOT NULL,\n    FOREIGN KEY(acc_ID) REFERENCES Accounts(ID),\n    var_races_ID BIGSERIAL "
-                "NOT NULL,\n    FOREIGN KEY(var_races_ID) REFERENCES var_races(ID),\n    class_ID BIGSERIAL NOT NULL,\n"
-                "    FOREIGN KEY(class_ID) REFERENCES Classes(ID),\n    weap_ID BIGSERIAL NOT NULL,\n    FOREIGN "
-                "KEY(weap_ID) REFERENCES Weapon(ID),\n    arm_ID BIGSERIAL NOT NULL,\n    FOREIGN KEY(arm_ID) "
-                "REFERENCES Armor(ID)\n);\n\n")
-        for i in range(15):
-            table_name = ""
-            if i == 0:
-                table_name = "weapon_types"
-            if i == 1:
-                table_name = "armor_types"
-            if i == 2:
-                table_name = "user_status"
-            if i == 3:
-                table_name = "descriptions"
-            if i == 4:
-                table_name = "Races"
-            if i == 5:
-                table_name = "var_races"
-            if i == 6:
-                table_name = "Accounts"
-            if i == 7:
-                table_name = "Classes"
-            if i == 8:
-                table_name = "Weapon"
-            if i == 9:
-                table_name = "Armor"
-            if i == 10:
-                table_name = "Spell_table"
-            if i == 11:
-                table_name = "Relat_table_t_weap_t_cl"
-            if i == 12:
-                table_name = "Relat_table_t_arm_t_cl"
-            if i == 13:
-                table_name = "Relat_table_t_spell_cl"
-            if i == 14:
-                table_name = "Character"
-            cur.execute(f'SELECT * FROM {table_name}')
-            for row in cur:
-                f.write(f"insert into {table_name} values " + str(row) + ";\n")
-            if i != 14:
-                f.write("\n")
-        time.sleep(3)
-        send_email(f"./{filename}")
-        os.remove(f"./{filename}")
-    except psycopg2.DatabaseError(psycopg2.Error):
-        print('Error %s' % psycopg2.Error)
-        sys.exit(1)
-    finally:
-        if con:
-            con.close()
+    host_name = "localhost"
+    database_name = "game_app"
+    user_name = "postgres"
+    database_password = ""
+    filename = CreateFileName('game_app')
+    command = f'pg_dump -h {host_name} -d {database_name} -U {user_name} -p 5432 -Fc -f {filename}'
+    p = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    p.communicate(bytes('{}\n'.format(database_password), encoding='utf8'))
+    send_email(f"./{filename}")
+    os.remove(f"./{filename}")
